@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}Bitchest{% endblock %}</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="../css/style.css">
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+        
+        
+        {% block stylesheets %}
+        {% endblock %}    
+    </head>
+    <body>
+
+        <div class="sidenav text-center">
+            <img class="imgbitchest" src="../images/bitchest_logo.png" alt="bitchest-logo" width="150px">
+            <a href="{{ path('backend_account', {'email': user.email}) }}">Mon compte</a>
+            <a href="{{ path('backend_portefeuille') }}">Mon portefeuille</a>
+            <a href="{{ path('backend_cours') }}">Cours des monnaies</a>
+            <a href="{{ path('backend_history') }}">Historique d'achats</a>
+            {% if is_granted('ROLE_ADMIN') == true %}
+                <a href="{{ path('super_admin') }}">Administration</a>
+            {% endif %}
+            <a href="{{ path('deconnexion') }}">Déconnection</a>
+        </div>
+
+        <div class="container">
+
+        {# {% if app.user %} #}
+            <div style="height:100px;" class="d-flex" style="height: 200px;">
+                <div style="line-height:50px;" class="mr-auto p-2">{{ user.email }}</div>
+                <div class="p-2">
+                    {% if user.avatar.name|is_url() is not null %}
+                        <img class="avatar-sm" src="{{ user.avatar.name }}">
+                    {% else %}
+                        <img class="avatar-sm" src="/images/avatars/{{ user.avatar.name }}">
+                    {% endif %}
+                </div>
+                <div style="line-height:50px;" class="p-2">Solde disponible : <b>{{ user.funds|number_format(2) }} €</b></div>
+            </div>
+        {# {% endif %} #}
+
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="alert alert-{{ label }} text-center">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endfor %}
+
+        {% block body %}
+        {% endblock %}
+        
+        </div>
+        
+        {% block javascripts %}{% endblock %}
+    </body>
+    {# <footer style="height:100px; background-color:#F1F1F1;">
+        <p class="text-center" style="color:#171717;line-height:70px;">Bitchest - Copyright 2019</p>
+    </footer> #}
+</html>
+

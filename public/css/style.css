@@ -1,0 +1,76 @@
+body {
+  font-family: "Lato", sans-serif;
+  margin-left: 250px;
+}
+
+.sidenav {
+  height: 100%;
+  width: 250px;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: rgb(206, 253, 251);
+  overflow-x: hidden;
+  padding-top: 20px;
+  margin-right: 50px;
+}
+
+.sidenav a {
+  padding: 6px 8px 6px 16px;
+  text-decoration: none;
+  font-size: 25px;
+  color: #2F4264;
+  display: block;
+}
+
+.sidenav a:hover {
+  color: #1CFF37;
+}
+
+.imgbitchest {
+    margin-bottom: 50px;
+}
+
+.main {
+  margin-left: 160px; /* Same as the width of the sidenav */
+  font-size: 28px; /* Increased text to enable scrolling */
+  padding: 0px 10px;
+}
+
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 18px;}
+}
+
+/* Set height of the grid so .sidenav can be 100% (adjust as needed) */
+.row.content {height: 550px}
+
+/* Set gray background color and 100% height */
+.sidenav {
+  background-color: #f1f1f1;
+  height: 100%;
+}
+    
+/* On small screens, set height to 'auto' for the grid */
+@media screen and (max-width: 767px) {
+  .row.content {height: auto;} 
+}
+
+.avatar-md
+{
+  width: 100px;
+  border-radius: 50%;
+}
+
+.avatar-sm
+{
+  width: 50px;
+  border-radius: 50%;
+}
+
+.avatar-mini
+{
+  width: 15px;
+  border-radius: 50%;
+}

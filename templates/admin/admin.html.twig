@@ -1,0 +1,74 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+<h1 class="text-center">ESPACE D'ADMINISTRATION</h1>
+
+<hr>
+<br>
+<br>
+	<h3>GESTION DES UTILISATEURS</h3>
+	<table class="table table-striped">
+    <thead>
+        <tr>
+        <th scope="col">#</th>
+        <th scope="col">Prénom</th>
+        <th scope="col" >Nom</th>
+        <th scope="col">Email</th>
+        <th scope="col">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for man in users %}
+    <tr>
+        {% if man.avatar.name|is_url() is not null %}
+            <td><img class="avatar-mini" src="{{ man.avatar.name }}"></td>
+        {% else %}
+            <td><img class="avatar-mini" src="/images/avatars/{{ man.avatar.name }}"></td>
+        {% endif %}
+
+        <td>{{ man.firstname }}</td>
+        <td>{{ man.lastname }}</td>
+        <td>{{ man.email }}</td>
+        <td>
+            <a href="{{ path('backend_account', {'email': man.email}) }}">Voir</a>
+            | <a href="{{ path('super_admin_updateUser', {'email': man.email}) }}">Modifier</a>
+            {% if man.email != user.email %}
+            | <a onclick="return confirm('Etes-vous sur de vouloir supprimer cet utilisateur ?');" href="{{ path('super_admin_deleteUser', {'email': man.email}) }}">Supprimer</a>
+            {% endif %}
+        </td>
+    </tr>
+    {% endfor %}
+
+    </tbody>
+</table>
+
+
+	<br><br>
+        
+
+<h2>Ajout d'un utilisateur</h2>
+	<hr>
+	{{ form_start(form) }}
+
+	<div style="width:500px;">
+	{{ form_row(form.email, {'label': 'Email'}) }}
+
+	{{ form_row(form.password, {'label': 'Mot de passe'},  {'attr': 'required'}) }}
+
+	{{ form_row(form.adminChoice, {'label': 'Droit utilisateur'}) }}
+
+	{{ form_row(form.funds, {'label': 'Crédit'}) }}
+	</div>
+
+
+	<button type="submit" class="btn btn-primary">Créer un compte</button>
+	{{ form_row(form._token) }}
+
+
+
+
+
+
+
+{% endblock %}

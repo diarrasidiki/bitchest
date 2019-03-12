@@ -1,0 +1,59 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<h1>Historique d'achats</h1>
+
+<table class="table table-sm table-dark">
+<thead>
+<tr>
+<th>Date achat</th>
+<th>Monnaie</th>
+<th>Montant en Crypto</th>
+<th>Montant en €</th> {# dans l'history des cours, prendre le cours au moment de la date d'achat x montant en crypto #}
+<th>Gain si vente</th>{# = (cours au moment de la date d'achat x montant en crypto) - (cours actuel x montant en crypto) #}
+</tr>
+</thead>
+
+<tbody>
+{% for histo in wallet if histo.quantity > 0 %}
+<tr>
+{# {{dump(histo)}} #}
+<td>
+    {% for data in histo.dateBuys %}
+        {{ data.dateOfPurchase|date('d/m/Y') }}
+    {% endfor %}
+</td>
+<td>
+    {% for data in histo.dateBuys %}
+        {{ data.wallet.cryptomonney.name }}
+    {% endfor %}
+</td>
+<td>
+    {% for data in histo.dateBuys %}
+        {{ data.wallet.quantity|number_format(2, ',', ' ') }}
+    {% endfor %}
+</td>
+<td>
+    {% for data in histo.dateBuys %}
+        {{ data.amount|number_format(2, ',', ' ') }}€
+    {% endfor %}
+</td>
+<td>
+    {% for monn in monney %}
+    {% for data in histo.dateBuys if data.wallet.cryptomonney.name == monn.name %}
+        {{ (monn.actualCurrency * data.wallet.quantity - data.wallet.quantity * data.dayCurrency)|number_format(2, ',', ' ') }}€
+    {% endfor %}
+    {% endfor %}
+</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+
+{# {% if wallet is empty %}
+<hr>
+<h3>Votre historique d'achat actif est vide :(</h3>
+{% endif %} #}
+
+
+{% endblock %}

@@ -1,0 +1,61 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+	<br>
+	<br>
+	<h1 class="text-center">COURS DES CRYPTOMONNAIES</h1>
+	<br>
+	<br>
+	<hr>	 
+
+	{% for monn in monney %}
+	<p>Crypto monnaie : {{ monn.name }}, valeur du cours actuel : {{ monn.actualCurrency }}. {{ monn.variationOfDay }} %</p>
+	<p>{{ monn.description }}</p>
+{# {% set dataPoint = monn.history|unserialize()|array_slice()|json_encode()|raw %} #}
+{# {{ dataPoint|die }} #}
+<script type="text/javascript">
+		$(function(){
+		$("#chartContainer{{ monn.name }}").CanvasJSChart({ 
+		animationEnabled: false,
+		//theme: "light2",
+		title:{
+			text: "Cours du {{ monn.name }} les 30 derniers jours"
+		},
+		axisX:{
+			crosshair: {
+				enabled: false,
+				snapToDataPoint: false
+			}
+		},
+		axisY:{
+			title: "Euros pour 1 {{ monn.name }}",
+			crosshair: {
+				enabled: false,
+				snapToDataPoint: false
+			}
+		},
+		toolTip:{
+			enabled: true
+		},
+		data: [{
+			type: "area",
+			dataPoints: {{ monn.history|unserialize()|array_slice()|json_encode()|raw }}
+		}]
+	});
+});
+
+</script>
+<div id="chartContainer{{ monn.name }}" style="height: 370px; width: 100%;"></div>
+
+	<br>
+	<hr>
+
+	{% endfor %}	
+
+		<script type="text/javascript" src="https://canvasjs.com/assets/script/jquery-1.11.1.min.js"></script>  
+        <script type="text/javascript" src="https://canvasjs.com/assets/script/jquery.canvasjs.min.js"></script>
+        <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+
+
+{% endblock %}

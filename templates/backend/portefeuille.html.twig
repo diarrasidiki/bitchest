@@ -1,0 +1,84 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<table class="table table-striped">
+    <thead>
+        <tr>
+        <th scope="col">Monnaie</th>
+        <th scope="col">Montant</th>
+        <th scope="col">Cours actuel</th>
+        <th scope="col">Variance</th>
+        <th scope="col">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for monn in monney %}
+    <tr {% for wall in user.wallets if wall.cryptomonney.name == monn.name and wall.quantity > 0 %} class="table-warning" {% endfor %}>
+        {# MONNAIE #}
+        <td><img src="/images/{{ monn.name }}.png"> {{ monn.name|capitalize }}</td>
+
+        {# QUANTITE #}
+        <td>
+            {% for wall in user.wallets if wall.cryptomonney.name == monn.name and wall.quantity > 0 %}
+                <b>{{ wall.quantity|number_format(2, ',', ' ') }}</b>
+            {% endfor %}             
+        </td>
+        {# COURS ACTUEL #}
+        <td>
+                {{ monn.actualCurrency|number_format(2) }}
+        </td>
+        {# VARIANCE #}
+        <td>
+
+            {% for wall in user.wallets if wall.cryptomonney.name == monn.name %}
+
+
+
+        {# SCRIPT DE LA REQUETE AJAX #}
+        <script type="text/javascript">
+        var t = self.setInterval("CotationUpdate()",10000);
+            function CotationUpdate(){
+            $.ajax({
+                url: "{{ path('backend_maj-variance') }}",
+                complete: function (response) {
+                   JSON.parse(json).$("#notifications{{ monn.name }}").html(response.responseText);
+                }
+            });
+        }
+
+        {# $.ajax({
+                url: "{{ path('backend_maj-variance') }}",
+                complete: function (response) {
+                   var results = JSON.parse(response.responseText)
+                    for(var i = 0; i < results.length; i++)
+                    {
+                        $("#notifications{{ monn.name }}").html(results[i]);
+                    }
+                }
+
+            }); #}
+
+        </script>
+
+                {% if monn.variationOfDay >= 0 %}
+                    <span id="notifications{{ monn.name }}" class="badge badge-success">{{ monn.variationOfDay }}</span>
+                {% else %}
+                    <span id="notifications{{ monn.name }}" class="badge badge-danger">{{ monn.variationOfDay }}</span>
+                {% endif %}
+            {% endfor %}
+        </td>
+        {# ACTION #}
+        <td>
+            <a href="{{ path('backend_buy', {'name': monn.name}) }}">Acheter</a>
+            {% for wall in user.wallets if wall.cryptomonney.name == monn.name and wall.quantity > 0 %}
+            | <a onclick="return confirm('Etes-vous sur de vouloir vendre ?');" href="{{ path('backend_sell', {'name': monn.name}) }}">Vendre</a>
+            {% endfor %}
+        </td>
+    </tr>
+    {% endfor %}
+
+    </tbody>
+</table>
+
+
+{% endblock %}

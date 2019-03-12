@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+	<h1 class="text-center mt-3">Ma page perso</h1>
+    <br>
+    <hr>
+	<br>
+<section class="container">
+    <div class="row align-items-center">
+        <div class="col-3 text-center">
+
+        {% if userAccount.avatar.name|is_url() is not null %}
+            <img class="avatar-md" src="{{ userAccount.avatar.name }}">
+        {% else %}
+            <img class="avatar-md" src="/images/avatars/{{ userAccount.avatar.name }}">
+        {% endif %}
+
+            <br>
+        </div> 
+        <div class="col-9">
+            <h3>{{userAccount.firstname}} {{userAccount.lastname}}</h3>
+            {% if userAccount is same as (app.user) %}
+                <a href="{{ path ('backend_account_update', {'email': userAccount.email}) }}" class="btn btn-primary mr-2">Editer mon profil</a>
+            {% endif %}
+        </div>
+    </div>
+    <br>
+    <h3>Vos achats du moment :
+    {% for monn in monney %}
+    {% for wall in userAccount.wallets if wall.cryptomonney.name == monn.name and wall.quantity > 0 %} <img src="/images/{{ monn.name }}.png">  {% endfor %}
+    {% endfor %}
+    </h3>
+    <br>
+            <div class="btn btn-success">Fonds disponible : {{ userAccount.funds }}€</div>
+</section>
+
+{% endblock %}
